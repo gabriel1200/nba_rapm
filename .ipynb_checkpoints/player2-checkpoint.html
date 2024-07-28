@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+
+<div class="bg-dark text-white text-center py-4">
+    <h1 class="display-4" id="params.title">{{ params.title }}</h1>
+    <p>{{ params.subtitle }}</p>
+</div>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <label for="graphSelect">Select Graph</label>
+                <select class="form-control" id="graphSelect">
+                    {% for option in params.graph_options %}
+                        <option>{{option}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="season-dropdown">Select Seasons</label>
+                <select class="form-control" id="season-dropdown"name ="seasons[]">
+                    {% for season in params.seasons %}
+                        <option value="{{season}}">{{season}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="players-dropdown">Select Players</label>
+                <select class="form-control" id="players-dropdown"  type="search" name="player"   >
+                    <!-- Add player options here -->
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div id="chart" style="width:100%;"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type='text/javascript'>
+    var figure = JSON.parse({{params.graph | safe}});
+    var config = {responsive: true};
+    Plotly.newPlot('chart', figure.data, figure.layout, config);
+
+    window.addEventListener('resize', function() {
+        Plotly.Plots.resize('chart');
+    });
+</script>
+{% endblock %}
